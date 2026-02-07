@@ -2,15 +2,20 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="refresh" content="0; url=./?redirect=%2F" />
     <script>
-      // Redirect to index.html with the original path + query + hash
-      var redirectTo =
-        location.pathname + location.search + location.hash;
+      (function () {
+        var l = window.location;
+        var params = new URLSearchParams(l.search);
+        params.delete("redirect");
 
-      // If you're hosted under a subpath, keep it (e.g. /suva-docs)
-      // We'll decode it inside React.
-      location.replace("./?redirect=" + encodeURIComponent(redirectTo));
+        var cleanSearch = params.toString();
+        var target =
+          l.pathname +
+          (cleanSearch ? "?" + cleanSearch : "") +
+          l.hash;
+
+        l.replace("./?redirect=" + encodeURIComponent(target));
+      })();
     </script>
   </head>
   <body></body>

@@ -154,16 +154,20 @@ function Layout({ children }) {
 ========================= */
 
 export default function App() {
-  
+
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const redirect = params.get("redirect");
+    const url = new URL(window.location.href);
+    const redirect = url.searchParams.get("redirect");
     if (!redirect) return;
 
+    url.searchParams.delete("redirect");
+
     const decoded = decodeURIComponent(redirect);
+
     const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
     const cleaned = decoded.startsWith(base) ? decoded.slice(base.length) : decoded;
 
+    // replace the address bar with the real route (no redirect param)
     window.history.replaceState(null, "", cleaned || "/");
   }, []);
 
