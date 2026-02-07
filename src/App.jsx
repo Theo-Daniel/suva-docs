@@ -154,6 +154,19 @@ function Layout({ children }) {
 ========================= */
 
 export default function App() {
+  
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
+    if (!redirect) return;
+
+    const decoded = decodeURIComponent(redirect);
+    const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+    const cleaned = decoded.startsWith(base) ? decoded.slice(base.length) : decoded;
+
+    window.history.replaceState(null, "", cleaned || "/");
+  }, []);
+
   return (
     <Layout>
       <Routes>
